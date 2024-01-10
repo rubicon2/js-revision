@@ -89,3 +89,12 @@ const myModule = function() {
 }();
 
 myModule.myPublicMethod('BURGER PLUGS');
+
+function factoryVector(x, y) {
+    return { x, y };
+}
+
+let v1 = factoryVector(0, 0);
+let v2 = factoryVector(2, 5);
+console.log('v1: ', v1);
+console.log('v2: ', v2);
