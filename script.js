@@ -98,3 +98,8 @@ let v1 = factoryVector(0, 0);
 let v2 = factoryVector(2, 5);
 console.log('v1: ', v1);
 console.log('v2: ', v2);
+
+// Destructuring assignment -  What a great way to swap the values of two (or more) variables! No temp variables required. 
+[v1, v2] = [v2, v1];
+console.log('v1: ', v1);
+console.log('v2: ', v2);
