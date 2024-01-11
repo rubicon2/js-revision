@@ -219,3 +219,74 @@ boris.standardMethod();
 // As the objects like innerObject, middleObject and outerObject are global, 'this' refers to the window object. 
 console.log("\nVALUE OF THIS WITHIN NESTED OBJECTS - ARROW METHODS")
 boris.arrowMethod();
+
+// Creating an object with object constructors - looks basically the same as a normal function
+// except for the presence of the 'this' keyword in its body. I think this is a weakness. 
+// The function body may not be this simple and easy to read and you'll be relying on the function name to accurately tell you what it does. 
+// However constructors and object composition are very flexible compared to class based inheritance. 
+function createObject(someStuff) {
+    this.someStuff = someStuff;
+}
+
+// Adding a method to its prototype.
+createObject.prototype.someMethod = function(arg) {
+    console.log(arg);
+}
+
+// Class syntax, does basically the same (syntactical sugar) but the syntax is cleaner in my opinion. 
+// You already know what it does, and how it works, because the class keyword, and every part of its functionality
+// is encapsulated within the class itself. 
+// HOWEVER you can add methods and properties to a class later on by accessing SomeClass.prototype.
+// I have no idea why you would want to do that, but it is possible. 
+class SomeClass {
+    constructor(someStuff) {
+        this.someStuff = someStuff;
+    }
+
+    someMethod(arg) {
+        console.log("Some method called with: ", arg);
+    }
+}
+
+// If 'new' keyword is missed, error thrown is 'TypeError: someObject is undefined'. Reason for error could be many things - more difficult to debug. 
+let someObject = new createObject("Ploppers");
+someObject.someMethod("Hiya from some object!");
+// If 'new' keyword is missed, error thrown is 'TypeError: class constructors must be invoked with 'new'. Easier to debug as it tells you exactly what you did wrong. 
+let someClassInstance = new SomeClass("Bangers");
+someClassInstance.someMethod("Hey from some class instance!");
+
+SomeClass.prototype.ploppers = function() {
+    console.log("I am a method added to a class using the prototype method. What's gonna happen?!");
+}
+
+SomeClass.prototype.someProperty = "I'm a property added to the class after it was already made.";
+
+someClassInstance.ploppers();
+console.log(someClassInstance.someProperty);
+
+let anotherClassInstance = new SomeClass("More Bangers");
+anotherClassInstance.someProperty = "The property was changed for MORE BANGERS!";
+
+console.log("     Bangers: ", someClassInstance.someProperty);
+console.log("More Bangers: ", anotherClassInstance.someProperty);
+
+class AnotherClass {
+    constructor(someStuff) {
+        this.someStuff = someStuff;
+    }
+
+    anotherMethod(arg) {
+        console.log("Another method called with: ", arg);
+    }
+}
+
+// This sort of weird stuff doesn't work - no access to functions on prototype
+// let classComposition = Object.assign({}, new SomeClass("Wow it's some stuff."), new AnotherClass("Wow it is MORE STUFF."));
+// console.log("An object created with composition technique, based off 2 different classes: ", classComposition);
+// classComposition.someMethod("some parameters");
+// classComposition.anotherMethod("another set of parameters");
+// This also doesn't work - no access to functions on prototype
+// let classInstanceComposition = Object.assign({}, someClassInstance, anotherClassInstance);
+// console.log("An object created with composition technique, based off instances of 2 different classes: ", classInstanceComposition);
+// classInstanceComposition.someMethod("some parameters");
+// classInstanceComposition.anotherMethod("another set of parameters");
