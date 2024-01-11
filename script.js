@@ -234,6 +234,7 @@ createObject.prototype.someMethod = function(arg) {
 }
 
 // Class syntax, does basically the same (syntactical sugar) but the syntax is cleaner in my opinion. 
+// Can also use get and get which are very convenient. 
 // You already know what it does, and how it works, because the class keyword, and every part of its functionality
 // is encapsulated within the class itself. 
 // HOWEVER you can add methods and properties to a class later on by accessing SomeClass.prototype.
