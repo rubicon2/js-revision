@@ -150,3 +150,72 @@ function noNamespace() {
 }
 
 alert(noNamespace());
+
+// Basically, 'this' refers to the global window object unless it is invoked within an object. 
+// Testing how the value of 'this' changes as functions housed within nested objects are called
+const innerObject = {
+    name: "I'm an inner object!",
+    arrowMethodInner: () => {
+        console.log("Inner arrow this: ", this);
+        console.log(this.name);
+    },
+    standardMethodInner: function() {
+        console.log("Inner this: ", this);
+        console.log(this.name);
+    }
+}
+
+const middleObject = {
+    // Will print the below string, not the 'name' property from the object that set off the chain of functions
+    name: "I'm a middle object!",
+    arrowMethodMid: () => {
+        console.log("Middle arrow this: ", this);
+        console.log(this.name);
+        innerObject.arrowMethodInner();
+    },
+    standardMethodMid: function() {
+        console.log("Middle this: ", this);
+        console.log(this.name);
+        innerObject.standardMethodInner();
+        // To preserve 'this' as a reference to the object that originally invoked it:
+        // innerObject.standardMethodInner.call(this);
+    }
+}
+
+const outerObject = {
+    // Will print 'name' from the object that invoked these functions - will not print "I'm an outer object!".
+    name: "I'm an outer object!",
+    arrowMethodOuter: () => {
+        console.log("Outer arrow this: ", this);
+        console.log(this.name);
+        middleObject.arrowMethodMid();
+    },
+    standardMethodOuter: function() {
+        console.log("Outer this: ", this);
+        console.log(this.name);
+        middleObject.standardMethodMid();
+        // To preserve 'this' as a reference to the object that originally invoked it:
+        // middleObject.standardMethodMid.call(this);
+    }
+}
+
+function createStartingObject(name) {
+    return {
+        name,
+        arrowMethod: outerObject.arrowMethodOuter,
+        standardMethod: outerObject.standardMethodOuter
+    }
+}
+
+let boris = createStartingObject("Boris");
+
+// 'this' refers to the object from which the function was invoked. 
+// So the reference to the original object is lost beyond the first invocation. 
+// Can use bind or call or apply methods to get around this if necessary.
+console.log("VALUE OF THIS WITHIN NESTED OBJECTS - STANDARD METHODS");
+boris.standardMethod();
+
+// Arrow methods don't create their own closure/lexicon, they use that of the containing function. 
+// As the objects like innerObject, middleObject and outerObject are global, 'this' refers to the window object. 
+console.log("\nVALUE OF THIS WITHIN NESTED OBJECTS - ARROW METHODS")
+boris.arrowMethod();
